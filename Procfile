@@ -1,2 +1,3 @@
-web: python -m Adarsh
+web: python bot.py
+worker: python bot.py
  
