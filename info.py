@@ -33,4 +33,4 @@ DATABASE_NAME = environ.get('DATABASE_NAME', "TonyStarkBotz")
 # Shortlink Info
 SHORTLINK = bool(environ.get('SHORTLINK', True)) # Set True Or False
 SHORTLINK_URL = environ.get('SHORTLINK_URL', 'api.shareus.io')
-SHORTLINK_API = environ.get('SHORTLINK_API', 'hRPS5vvZc0OGOEUQJMJzPiojoVK2')
+SHORTLINK_API = environ.get('SHORTLINK_API', 'I9M09gJEv7gVgh2kz7EYAOKLLd03')
