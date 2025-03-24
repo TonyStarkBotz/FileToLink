@@ -1,148 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="https://i.ibb.co/qJyZWCv/20230629-081948-0000.png" type="image/x-icon">
+    <meta property="og:image" content="https://i.ibb.co/qJyZWCv/20230629-081948-0000.png" itemprop="thumbnailUrl">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{file_name}}</title>
-    <link rel="stylesheet" href="https://unpkg.com/sheryjs/dist/Shery.css" />
-    <link rel="stylesheet" href="https://biisal.github.io/Resources/StreamCSS.css">
-    <link rel="stylesheet" href="https://biisal.github.io/Resources/playerCss.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>{{file_name}} | DigitalGalaxyHQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.js"></script>    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.9/plyr.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
-<body>
-    <nav>
-        <div class="nleft">
-            <a href="https://t.me/DigitalGalaxyHQ">
-                <!-- if u are trying to change the header name please remove the title text from bottom line  -->
-                <h3 id="heading" style="z-index: 100;" class="magnet title">DigitalGalaxyHQ</h3>
-            </a>
-        </div>
-    <div class="outer">
-        <div class="inner">
-            <div class="main" id="main">
-                <video id="player" class="player" src="{{file_url}}" type="video/mp4" playsinline controls
-                    width="100%"></video>
-                <div class="player"></div>
-                <div class="file-name">
-                    <h4>File name : </h4>
-                    <br>
-                    <p id="myDiv">{{file_name}}</p>
-                </div>
-                <div class="downloadBtn">
-                    <button class="magnet" onclick="vlc_player()"><img src="https://i.postimg.cc/15TQ4y7B/vlc.png"
-                            alt="">watch in VLC PLAYER</button>
-                    <button class="magnet" onclick="mx_player()"><img src="https://i.postimg.cc/sx4Msv4T/mx.png"
-                            alt="">watch in MX PLAYER</button>
-                    <button class="magnet" onclick="playit_player()"><img src="https://i.postimg.cc/RVGWYJFF/playit.png"
-                            alt="">watch in PLAYit
-                        PLAYER</button>
-                    <button class="magnet" onclick="km_player()"><img src="https://i.postimg.cc/wT9tFQ9Z/km.png"
-                            alt="">watch in KM PLAYER</button>
-                    <button class="magnet" onclick="s_player()"><img src="https://i.postimg.cc/XYJr6NGg/s.png"
-                            alt="">watch in S PLAYER</button>
-                    <button class="magnet" onclick="hd_player()"><img src="https://i.postimg.cc/rFT43LNh/hd.png"
-                            alt="">watch in HD
-                        PLAYER(4K)</button>
-                </div>
 
+<body class="bg-black">
+    <header>
+        <nav class="navbar bg-dark p-lg-4 p-2">
+            <div class="container-fluid">
+                <a class="navbar-brand text-light fw-bold">
+                    <span class="bg-clip-text sm:text-[25px] text-[22px] text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
+                        DigitalGalaxyHQ Streaming
+                    </span>
+                </a>
             </div>
-            <div class="abt">
-                <div class="about">
-                    <div class="about-dets">
-                        <div class="abt-sec" id="sec1" style="padding: 160px 30px;">
-                            <h1 style="text-align: center;">WELCOME TO OUR <Span>STREAMING</Span> PAGE</h1>
-                            <p style="text-align: center; line-height: 2;word-spacing: 2px;  letter-spacing: 0.8px;">
-                                We're
-                                thrilled to have <span>you</span> here.
-                                Get ready for an
-                                amazing <span>experience</span>
-                                filled with <span>entertainment</span>, <span>fun</span>, and <span>surprises</span>.
-                                Grab
-                                your snacks, sit back, and <span>enjoy</span> the show!
-                            </p>
-                        </div>
-                        </div>
-                        <div class="abt-sec" id="sec4">
-                            <p style="text-align: center;">we can talk for your support and you can report through
-                                telegram</p>
-                            <div class="links contact">
-                                <a href="https://t.me/TonyContactBot"><button>CONTACT</button></a>
-                            </div>
-                        </div>
-                    </div>
+        </nav>
+    </header>
+
+    <div class="bg-black text-light">
+        <div class="justify-content-center align-items-center w-100 d-flex">
+            <div id="file-name" class="text-center text-lg max:w-74 p-2 flex-wrap">
+                <p class="fw-bold"> 
+                    <span id="myDiv" class="h6 flex-wrap card-title wow animate__animated animate__fadeInRight">
+                        {{file_name}}
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="justify-content-center align-items-center w-100 d-flex flex-wrap">
+            <div class="lg:w-9/12 lg:px-12 lg:py-4 w-full border border-danger wow animate__animated animate__fadeInLeft">
+                <video id="player" class="player" playsinline controls>
+                    <source src="{{file_url}}" type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <div class="justify-content-center align-items-center w-100 d-flex mb-3">
+            <div class="row d-flex w-100 justify-content-center align-items-center">
+                <div class="col-lg-8 col-10 py-2 text-center bg-danger rounded-4 text-sm wow animate__animated animate__FadeIn">
+                    Video not playing? Possibly because your browser or the player doesn't support the codec. Please download and watch.
                 </div>
             </div>
         </div>
-        <footer>
-            <center>
+    </div>
 
-                <div class="movie-cont">
-                    <a href="https://t.me/DigitalGalaxyHQ">
-                        <div class="movieSug">
-                            <div class="movieDets">
-
-                            </div>
-                            <div class="movieimg">
-                                <img src="">
-                            </div>
-                        </div>
-                    </a>
-                    <div class="low-width-movie-dets">
-                        <div class="movieStsBar">
-                            <div class="movieDets-mini">
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </center>
-
-            <center>
-                <div class="copyright">
-                    <h5 class="text-center">Copyright © 2025 <a href="https://t.me/DigitalGalaxyHQ"><span
-                                style="font-weight: 700;">DigitalGalaxyHQ</span></a>. All
-                        Rights Reserved.</h5>
-                    <div class="icons">
-                        <a href="https://github.com/DigitalGalaxyHQ"><i class="fa-brands fa-github fa-lg"></i></a>
-                        <a href="https://t.me/DigitalGalaxyHQ"><i class="fa-brands fa-telegram fa-lg"></i></a>
-                    </div>
-                    <h4 style="font-weight: 700;">This Page Is Made By <a
-                            href="https://t.me/DigitalGalaxyHQ"><span>DigitalGalaxyHQ</span></a></h4>
-                </div>
-            </center>
-        </footer>
+    <footer class="bg-dark text-light text-center p-3">
+        <p class="mb-0">© DigitalGalaxyHQ</p>
+    </footer>
 </body>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/automat/controlkit.js@master/bin/controlKit.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sheryjs/dist/Shery.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const uncopyableElement = document.querySelector(".uncopyable");
-
-        uncopyableElement.addEventListener("selectstart", function (event) {
-            event.preventDefault();
-        });
-    });
-</script>
-<script src="js/wow.min.js"></script>
-<script>
-    new WOW().init();
-</script>
-<script src="https://cdn.plyr.io/3.6.9/plyr.js"></script>
-<script src="https://biisal.github.io/Resources/StreamJs.js"></script>
-<script src="script.js"></script>
-
 </html>
