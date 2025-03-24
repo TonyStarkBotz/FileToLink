@@ -20,10 +20,10 @@ if 'DYNO' in environ:
     ON_HEROKU = True
 else:
     ON_HEROKU = False
-URL = environ.get("URL", "")
+URL = environ.get("URL", "https://used-devi-devninjaxtt-af503960.koyeb.app/")
 
 # Admins, Channels & Users
-LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002140248158'))
+LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002004214623'))
 ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '5019668523').split()]
 
 # MongoDB information
