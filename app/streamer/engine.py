@@ -7,25 +7,42 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-async def media_streamer(client: TelegramClient, file, start: int, end: int, chunk_size: int = 4 * 1024 * 1024):
+async def media_streamer(client: TelegramClient, file, start: int, end: int, chunk_size: int = 1024 * 1024):
     """
-    Generator that yields chunks of media from Telegram.
-    Highly optimized and precise for streaming.
+    Parallel media streamer that fetches multiple chunks from Telegram simultaneously.
+    This bypasses sequential bottlenecks and maxes out available bandwidth.
     """
+    import asyncio
     total_to_send = end - start + 1
     bytes_sent = 0
+    concurrency = 8  # Number of parallel requests
     
-    try:
-        # iter_download is the most compatible way to stream chunks
-        async for chunk in client.iter_download(
-            file,
-            offset=start,
-            request_size=chunk_size
-        ):
-            if bytes_sent >= total_to_send:
-                break
-                
-            # If the last chunk is larger than what we need, slice it
+    # Divide the requested range into smaller chunks for parallel fetching
+    offsets = list(range(start, end + 1, chunk_size))
+    
+    for i in range(0, len(offsets), concurrency):
+        batch = offsets[i:i + concurrency]
+        
+        # Helper to fetch a single chunk
+        async def fetch_part(offset):
+            # Calculate remaining size to avoid over-fetching
+            remaining = end - offset + 1
+            current_chunk_size = min(chunk_size, remaining)
+            
+            # Use download_file for precise offset/size fetching
+            return await client.download_file(
+                file, 
+                offset=offset, 
+                file_size=current_chunk_size
+            )
+
+        # Fetch batch in parallel
+        tasks = [fetch_part(offset) for offset in batch]
+        chunks = await asyncio.gather(*tasks)
+        
+        for chunk in chunks:
+            if not chunk: continue
+            
             if bytes_sent + len(chunk) > total_to_send:
                 chunk = chunk[:total_to_send - bytes_sent]
             
@@ -34,10 +51,6 @@ async def media_streamer(client: TelegramClient, file, start: int, end: int, chu
             
             if bytes_sent >= total_to_send:
                 break
-                
-    except Exception as e:
-        import logging
-        logging.getLogger(__name__).error(f"Streaming error: {e}")
 
 def get_range_header(request: Request, file_size: int):
     range_header = request.headers.get("Range")
