@@ -27,12 +27,26 @@ def register_handlers(bot):
                 last_name=event.sender.last_name
             )
             await users_col.insert_one(new_user.dict())
+            
+            # Log New User
+            if settings.CHANNEL_ID:
+                try:
+                    name = f"{event.sender.first_name} {event.sender.last_name or ''}".strip()
+                    await bot.send_message(
+                        settings.CHANNEL_ID,
+                        f"#NewUser\n\n"
+                        f"Iᴅ - `{user_id}`\n"
+                        f"Nᴀᴍᴇ - {name}\n"
+                        f"Usᴇʀɴᴀᴍᴇ - @{event.sender.username or 'N/A'}"
+                    )
+                except Exception as e:
+                    logger.error(f"Error sending new user log: {e}")
         
         await event.respond(
             "👋 Welcome to Direct Media Link Generator Bot!\n\n"
             "Send me any media file and I will generate a direct download/stream link for you.",
             buttons=[
-                [Button.url("Join Channel", "https://t.me/your_channel")],
+                [Button.url("Join Channel", "https://t.me/cantarellabots"), Button.url("Developer", "https://t.me/cantarella_wuwa")],
                 [Button.inline("Help", b"help"), Button.inline("About", b"about")]
             ]
         )
@@ -53,7 +67,7 @@ def register_handlers(bot):
             await event.reply(
                 "❌ **Access Denied!**\n\n"
                 "You must join our channels to use this bot.",
-                buttons=[[Button.url("Join Channel", "https://t.me/your_channel")]]
+                buttons=[[Button.url("Join Channel", "https://t.me/cantarellabots")]]
             )
             return
 
@@ -102,6 +116,21 @@ def register_handlers(bot):
         
         download_url = f"{settings.BASE_URL}/dl/{short_code}"
         stream_url = f"{settings.BASE_URL}/watch/{short_code}"
+        
+        # Log File Upload
+        if settings.CHANNEL_ID:
+            try:
+                await bot.send_message(
+                    settings.CHANNEL_ID,
+                    f"#NewFile\n\n"
+                    f"👤 **Uploader:** {event.sender.first_name} (`{event.sender_id}`)\n"
+                    f"📁 **File:** `{file_name}`\n"
+                    f"⚖️ **Size:** `{file_size / (1024*1024):.2f} MB`\n\n"
+                    f"📥 **Download:** {download_url}\n"
+                    f"🎬 **Stream:** {stream_url}"
+                )
+            except Exception as e:
+                logger.error(f"Error sending file log: {e}")
         
         caption = (
             f"✅ **Link Generated!**\n\n"
