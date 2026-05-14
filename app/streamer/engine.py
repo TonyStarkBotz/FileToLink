@@ -23,18 +23,24 @@ async def media_streamer(client: TelegramClient, file, start: int, end: int, chu
     for i in range(0, len(offsets), concurrency):
         batch = offsets[i:i + concurrency]
         
-        # Helper to fetch a single chunk
+        # Helper to fetch a single chunk with retries
         async def fetch_part(offset):
             # Calculate remaining size to avoid over-fetching
             remaining = end - offset + 1
             current_chunk_size = min(chunk_size, remaining)
             
-            # Use download_file for precise offset/size fetching
-            return await client.download_file(
-                file, 
-                offset=offset, 
-                file_size=current_chunk_size
-            )
+            for attempt in range(3):
+                try:
+                    # Use download_file for precise offset/size fetching
+                    return await client.download_file(
+                        file, 
+                        offset=offset, 
+                        file_size=current_chunk_size
+                    )
+                except Exception:
+                    if attempt == 2: return None  # Failed after 3 attempts
+                    await asyncio.sleep(0.5)  # Quick retry
+            return None
 
         # Fetch batch in parallel
         tasks = [fetch_part(offset) for offset in batch]
