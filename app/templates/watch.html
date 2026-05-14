@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Watching: {{ file.filename }}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+
+<div class="max-w-4xl mx-auto">
+    <div class="glass-card overflow-hidden mb-8">
+        <video id="player" playsinline controls data-poster="/static/images/poster.jpg">
+            <source src="/stream/{{ file.short_code }}" type="{{ file.mime_type }}" />
+            <!-- Captions are optional -->
+        </video>
+    </div>
+
+    <div class="glass-card p-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+            <div>
+                <h1 class="text-3xl font-bold mb-2">{{ file.filename }}</h1>
+                <div class="flex gap-4 text-sm text-gray-400">
+                    <span><i class="fas fa-database mr-1"></i> {{ (file.file_size / (1024*1024))|round(2) }} MB</span>
+                    <span><i class="fas fa-clock mr-1"></i> {{ file.created_at.strftime('%Y-%m-%d') }}</span>
+                    <span><i class="fas fa-eye mr-1"></i> {{ file.access_count }} views</span>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <a href="/stream/{{ file.short_code }}" class="btn-gradient px-6 py-3 rounded-xl font-bold flex items-center gap-2">
+                    <i class="fas fa-download"></i> Download
+                </a>
+                <button onclick="copyLink()" class="glass px-6 py-3 rounded-xl font-bold flex items-center gap-2">
+                    <i class="fas fa-copy"></i> Copy
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white/5 p-4 rounded-2xl text-center">
+                <span class="block text-gray-400 text-xs uppercase tracking-wider mb-1">Status</span>
+                <span class="text-green-400 font-bold">Online</span>
+            </div>
+            <div class="bg-white/5 p-4 rounded-2xl text-center">
+                <span class="block text-gray-400 text-xs uppercase tracking-wider mb-1">Type</span>
+                <span class="font-bold">{{ file.mime_type.split('/')[-1]|upper }}</span>
+            </div>
+            <div class="bg-white/5 p-4 rounded-2xl text-center">
+                <span class="block text-gray-400 text-xs uppercase tracking-wider mb-1">Speed</span>
+                <span class="text-indigo-400 font-bold">Unlimited</span>
+            </div>
+            <div class="bg-white/5 p-4 rounded-2xl text-center">
+                <span class="block text-gray-400 text-xs uppercase tracking-wider mb-1">Quality</span>
+                <span class="font-bold">Original</span>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <h4 class="font-bold text-lg">Stream in Apps</h4>
+            <div class="flex flex-wrap gap-3">
+                <a href="vlc://{{ base_url }}/stream/{{ file.short_code }}" class="bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 px-4 py-2 rounded-lg flex items-center gap-2 transition">
+                    <i class="fas fa-play-circle"></i> VLC
+                </a>
+                <a href="mxplayer://{{ base_url }}/stream/{{ file.short_code }}" class="bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 px-4 py-2 rounded-lg flex items-center gap-2 transition">
+                    <i class="fas fa-play-circle"></i> MX Player
+                </a>
+                <a href="nplayer-http://{{ base_url }}/stream/{{ file.short_code }}" class="bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 px-4 py-2 rounded-lg flex items-center gap-2 transition">
+                    <i class="fas fa-play-circle"></i> nPlayer
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+<script>
+    const player = new Plyr('#player', {
+        title: '{{ file.filename }}',
+        keyboard: { focused: true, global: true },
+        tooltips: { controls: true, seek: true },
+    });
+
+    function copyLink() {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+            alert('Link copied to clipboard!');
+        });
+    }
+</script>
+{% endblock %}
