@@ -61,7 +61,7 @@ async def watch_page(request: Request, short_code: str):
     return templates.TemplateResponse("watch.html", {
         "request": request,
         "file": file_data,
-        "base_url": settings.BASE_URL
+        "base_url": settings.BASE_URL.rstrip('/')
     })
 
 @app.get("/dl/{short_code}")

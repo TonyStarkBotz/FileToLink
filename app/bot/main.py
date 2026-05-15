@@ -123,8 +123,9 @@ def register_handlers(bot):
         
         await files_col.insert_one(file_meta.dict())
         
-        download_url = f"{settings.BASE_URL}/dl/{short_code}"
-        stream_url = f"{settings.BASE_URL}/watch/{short_code}"
+        base_url = settings.BASE_URL.rstrip('/')
+        download_url = f"{base_url}/dl/{short_code}"
+        stream_url = f"{base_url}/watch/{short_code}"
         
         # Log File Upload
         if settings.CHANNEL_ID:
