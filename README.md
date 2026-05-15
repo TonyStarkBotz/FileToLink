@@ -15,6 +15,8 @@ A high-performance Telegram media streaming and direct link generator bot built 
 - 🛡️ **Rate Limiting**: Redis-powered (with memory fallback) rate limiting to prevent spam and abuse.
 - 📊 **Admin Dashboard**: Built-in logging for new users and file uploads.
 - 📁 **Adaptive Content-Type**: Supports streaming for video, audio, and high-quality photo previews.
+- 🔊 **Multi-Audio Support**: Switch between different audio tracks directly in the web player with on-the-fly remuxing.
+
 
 ## 🛠️ Tech Stack
 
@@ -22,6 +24,7 @@ A high-performance Telegram media streaming and direct link generator bot built 
 - **Telegram Logic**: Telethon (MTProto)
 - **Database**: MongoDB (Motor)
 - **Cache**: Redis (optional, falls back to memory)
+- **Processing**: FFmpeg (for audio track switching)
 - **Frontend**: HTML5, Vanilla CSS, TailwindCSS, Jinja2 Templates
 
 ## 🚀 Quick Start
