@@ -53,4 +53,8 @@ class SessionManager:
         self._index = (self._index + 1) % len(self.clients)
         return client
 
+    def get_all_clients(self):
+        """Return all available clients for parallel downloading"""
+        return self.clients if self.clients else [self.bot_client]
+
 session_manager = SessionManager()

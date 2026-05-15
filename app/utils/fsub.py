@@ -19,8 +19,9 @@ async def is_user_fsubbed(client, user_id):
         except UserNotParticipantError:
             return False
         except Exception as e:
-            logger.error(f"Error checking fsub for {user_id} in {channel_id}: {e}")
-            # If error (like bot not in channel), assume subscribed to avoid blocking users unnecessarily
-            continue
+            logger.error(f"FSUB ERROR: Could not verify subscription for {user_id} in {channel_id}. Error: {e}")
+            logger.error("Ensure the bot is an ADMINISTRATOR in the channel and the channel ID is correct.")
+            # If we can't verify, we must block to fulfill the "must be in channel" requirement
+            return False
             
     return True

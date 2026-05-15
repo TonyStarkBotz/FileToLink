@@ -11,10 +11,52 @@
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
         
         body {
+            margin: 0;
+            padding: 0;
+            color: white;
             font-family: 'Outfit', sans-serif;
-            background: radial-gradient(circle at top left, #1a1c2c, #0d0e14);
-            color: #e2e8f0;
             min-height: 100vh;
+            overflow-x: hidden;
+            background: #000;
+        }
+
+        #bg-video {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -2;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            filter: brightness(0.5);
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(10, 10, 20, 0.3) 0%, rgba(10, 10, 20, 0.7) 100%);
+            z-index: -1;
+        }
+
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0.1;
+            font-size: 2rem;
+            font-weight: 800;
+            pointer-events: none;
+            z-index: 1000;
+            user-select: none;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            transform: rotate(-15deg);
         }
 
         .glass {
@@ -24,7 +66,6 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
-
         .glass-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(16px);
@@ -58,20 +99,25 @@
     </style>
 </head>
 <body class="p-4 md:p-8">
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="/static/cantarella-smiles-at-you-wuthering-waves-moewalls-com.mp4" type="video/mp4">
+    </video>
+    <div class="bg-overlay"></div>
+    <div class="watermark">cantarellabots</div>
     <nav class="max-w-6xl mx-auto flex justify-between items-center mb-12 glass p-4 rounded-2xl">
         <div class="flex items-center space-x-3">
             <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
                 <i class="fas fa-bolt"></i>
             </div>
-            <span class="text-2xl font-bold tracking-tight">Fast<span class="text-indigo-500">Stream</span></span>
+            <span class="text-2xl font-bold tracking-tight">Cantarella<span class="text-indigo-500">Bots</span></span>
         </div>
         <div class="hidden md:flex space-x-8">
             <a href="/" class="hover:text-indigo-400 transition">Home</a>
-            <a href="#" class="hover:text-indigo-400 transition">Features</a>
-            <a href="#" class="hover:text-indigo-400 transition">Support</a>
+            <a href="https://t.me/cantarellabots" target="_blank" class="hover:text-indigo-400 transition">Channel</a>
+            <a href="https://t.me/cantarella_wuwa" target="_blank" class="hover:text-indigo-400 transition">Developer</a>
         </div>
-        <a href="https://t.me/your_bot" target="_blank" class="btn-gradient px-6 py-2 rounded-xl font-semibold">
-            Try Bot
+        <a href="https://t.me/cantarellabots" target="_blank" class="btn-gradient px-6 py-2 rounded-xl font-semibold">
+            Join Channel
         </a>
     </nav>
 
@@ -79,8 +125,20 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="mt-20 py-8 border-t border-white/5 text-center text-gray-500">
-        <p>&copy; 2024 FastStream Bot. All rights reserved.</p>
+    <footer class="mt-20 py-12 border-t border-white/5 text-center">
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold mb-2">CantarellaBots</h2>
+            <p class="text-gray-500">High-performance media streaming and automation solutions.</p>
+        </div>
+        <div class="flex justify-center gap-6 mb-8">
+            <a href="https://t.me/cantarellabots" target="_blank" class="text-gray-400 hover:text-indigo-400 transition flex items-center gap-2">
+                <i class="fab fa-telegram"></i> Channel
+            </a>
+            <a href="https://t.me/cantarella_wuwa" target="_blank" class="text-gray-400 hover:text-indigo-400 transition flex items-center gap-2">
+                <i class="fas fa-code"></i> Developer
+            </a>
+        </div>
+        <p class="text-gray-600 text-sm">&copy; 2024 CantarellaBots. All rights reserved. Developed by @cantarella_wuwa</p>
     </footer>
 </body>
 </html>

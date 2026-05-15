@@ -42,9 +42,18 @@ def register_handlers(bot):
                 except Exception as e:
                     logger.error(f"Error sending new user log: {e}")
         
+        # Force Sub Check
+        if not await is_user_fsubbed(bot, user_id):
+            return await event.respond(
+                "❌ **Access Denied!**\n\n"
+                "You must join our channels to use this bot.\n"
+                "Please join and then send /start again.",
+                buttons=[[Button.url("Join Channel", "https://t.me/cantarellabots")]]
+            )
+
         await event.respond(
-            "👋 Welcome to Direct Media Link Generator Bot!\n\n"
-            "Send me any media file and I will generate a direct download/stream link for you.",
+            "👋 Welcome to CantarellaBots Media Streamer!\n\n"
+            "Send me any media file and I will generate a direct high-speed download/stream link for you.",
             buttons=[
                 [Button.url("Join Channel", "https://t.me/cantarellabots"), Button.url("Developer", "https://t.me/cantarella_wuwa")],
                 [Button.inline("Help", b"help"), Button.inline("About", b"about")]
@@ -149,9 +158,24 @@ def register_handlers(bot):
             ]
         )
 
+    @bot.on(events.CallbackQuery())
+    async def global_callback_check(event):
+        if not await is_user_fsubbed(bot, event.sender_id):
+            return await event.answer("❌ You must join the channel first!", alert=True)
+        
     @bot.on(events.CallbackQuery(pattern=b'help'))
     async def help_callback(event):
         await event.answer("Just send any file to get a direct link!", alert=True)
+
+    @bot.on(events.CallbackQuery(pattern=b'about'))
+    async def about_callback(event):
+        await event.answer(
+            "🤖 CantarellaBots Media Streamer\n\n"
+            "This bot allows you to stream and download Telegram media at high speeds.\n\n"
+            "Channel: @cantarellabots\n"
+            "Developer: @cantarella_wuwa",
+            alert=True
+        )
 
     @bot.on(events.CallbackQuery(pattern=b'del_'))
     async def delete_callback(event):

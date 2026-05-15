@@ -6,11 +6,32 @@
 <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
 
 <div class="max-w-4xl mx-auto">
-    <div class="glass-card overflow-hidden mb-8">
+    <div class="glass-card overflow-hidden mb-4">
         <video id="player" playsinline controls data-poster="/static/images/poster.jpg">
             <source src="/stream/{{ file.short_code }}" type="{{ file.mime_type }}" />
             <!-- Captions are optional -->
         </video>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+        <a href="https://t.me/cantarellabots" target="_blank" class="flex-1 glass p-4 rounded-2xl flex items-center justify-center gap-3 hover:bg-white/10 transition group">
+            <div class="w-10 h-10 bg-indigo-500/20 rounded-full flex items-center justify-center text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition">
+                <i class="fab fa-telegram-plane"></i>
+            </div>
+            <div class="text-left">
+                <span class="block text-xs text-gray-400 uppercase tracking-widest">Join Telegram</span>
+                <span class="font-bold">@CantarellaBots</span>
+            </div>
+        </a>
+        <a href="https://t.me/cantarella_wuwa" target="_blank" class="flex-1 glass p-4 rounded-2xl flex items-center justify-center gap-3 hover:bg-white/10 transition group">
+            <div class="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition">
+                <i class="fas fa-user-ninja"></i>
+            </div>
+            <div class="text-left">
+                <span class="block text-xs text-gray-400 uppercase tracking-widest">Developer</span>
+                <span class="font-bold">@cantarella_wuwa</span>
+            </div>
+        </a>
     </div>
 
     <div class="glass-card p-8">
