@@ -31,8 +31,8 @@ A high-performance Telegram media streaming and direct link generator bot built 
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/abhinai2244/FILE-TO-LINK-BOT.git
-cd FILE-TO-LINK-BOT
+git clone https://github.com/abhinai2244/FileToLink.git
+cd FileToLink
 ```
 
 ### 2. Install Dependencies
