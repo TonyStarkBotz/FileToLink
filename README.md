@@ -109,7 +109,12 @@ This bot is designed to be easily deployable on modern cloud platforms.
 4. Configure your **Config Vars** in the Settings tab.
 
 > [!TIP]
-> **Performance Tip**: For the best streaming experience, use a VPS or a platform that doesn't "sleep" (like Render's paid tier or Koyeb's Nano instance). If using a free tier, the first request might be slow as the server "wakes up".
+> **Performance & Keep-Alive**: Most free platforms (like Render or Koyeb) will put your bot to "sleep" after 15-30 minutes of inactivity. To prevent this:
+> 1. Go to [UptimeRobot](https://uptimerobot.com/).
+> 2. Create a new **HTTP(s) Monitor**.
+> 3. Point it to your `BASE_URL` (e.g., `https://your-app.render.com/`).
+> 4. Set the interval to **5 minutes**. 
+> This will ping your site regularly and keep the bot awake 24/7!
 
 ## 🤝 Support & Credits
 
