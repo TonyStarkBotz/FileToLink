@@ -82,6 +82,35 @@ unban - Unban a user (Admin Only)
 └── .env
 ```
 
+## 🚀 Deployment
+
+This bot is designed to be easily deployable on modern cloud platforms.
+
+### 🌐 Deploy on Render
+1. Create a new **Web Service**.
+2. Connect your GitHub repository.
+3. Select **Python** as the environment.
+4. **Build Command**: `pip install -r requirements.txt`
+5. **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+6. Add all environment variables from `.env` in the **Environment** tab.
+
+### ☁️ Deploy on Koyeb
+1. Create a new **Service**.
+2. Choose **GitHub** and select your repository.
+3. In the **Build and Run** settings:
+   - Choose **Buildpack**.
+   - Set the **Run command** to: `uvicorn app.main:app --host 0.0.0.0 --port 8000` (Koyeb handles port mapping).
+4. Add your environment variables.
+
+### 🟣 Deploy on Heroku
+1. Create a new App.
+2. Add a `Procfile` (already included): `web: uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+3. Add the **Python Buildpack**.
+4. Configure your **Config Vars** in the Settings tab.
+
+> [!TIP]
+> **Performance Tip**: For the best streaming experience, use a VPS or a platform that doesn't "sleep" (like Render's paid tier or Koyeb's Nano instance). If using a free tier, the first request might be slow as the server "wakes up".
+
 ## 🤝 Support & Credits
 
 - **Developer**: [@cantarella_wuwa](https://t.me/cantarella_wuwa)
