@@ -1,15 +1,22 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import JSONResponse
 from app.database.connection import settings, files_col, create_indexes
 from app.streamer.manager import session_manager
-from app.streamer.engine import get_streaming_response
+from app.streamer.engine import get_streaming_response, get_remux_response
+from app.streamer.probe import probe_tracks
 from app.bot.main import register_handlers
 from app.admin.routes import router as admin_router
 from fastapi.middleware.gzip import GZipMiddleware
 import uvicorn
 import asyncio
 import logging
+import sys
+
+# Configure Windows Event Loop Policy for subprocess support
+if sys.platform == 'win32':
+    asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
 # Configure Logging
 logging.basicConfig(level=logging.INFO)
@@ -94,7 +101,106 @@ async def stream_file(request: Request, short_code: str):
         request=request
     )
 
+
+# ─── Audio Track Discovery API ────────────────────────────────────────────────
+
+@app.get("/api/tracks/{short_code}")
+async def get_tracks(short_code: str):
+    """Return available audio/video/subtitle tracks for a media file."""
+    file_data = await files_col.find_one({"short_code": short_code})
+    if not file_data:
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    # Check if tracks are already cached in the database (and not an error result)
+    cached = file_data.get('tracks_info')
+    if False and cached and not cached.get('error'):
+        return JSONResponse(cached)
+    
+    # Need to probe the file
+    client = session_manager.get_client()
+    
+    try:
+        msg = await client.get_messages(file_data['chat_id'], ids=file_data['message_id'])
+        if not msg or not msg.media:
+            raise HTTPException(status_code=404, detail="Media no longer available")
+        
+        media = msg.media
+        
+        # Photos don't have audio tracks
+        if hasattr(media, 'photo') and not hasattr(media, 'document'):
+            return JSONResponse({
+                "video_tracks": [],
+                "audio_tracks": [],
+                "subtitle_tracks": [],
+                "has_multiple_audio": False
+            })
+        
+        # Pass the message for download_media fallback, and media for iter_download
+        tracks_info = await probe_tracks(client, msg, file_data['file_size'])
+        
+        # Only cache if no error
+        if not tracks_info.get('error'):
+            await files_col.update_one(
+                {"short_code": short_code},
+                {"$set": {"tracks_info": tracks_info}}
+            )
+        
+        return JSONResponse(tracks_info)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Track probing error: {type(e).__name__}: {e}")
+        raise HTTPException(status_code=500, detail="Failed to probe tracks")
+
+
+# ─── Remux Streaming (Audio Track Selection) ──────────────────────────────────
+
+@app.get("/remux/{short_code}")
+async def remux_file(request: Request, short_code: str, audio: int = 0):
+    """
+    Stream media remuxed with a selected audio track.
+    Uses FFmpeg to remux (no transcoding) into fragmented MP4.
+    
+    Query params:
+        audio: Audio track index (0-based, default 0)
+    """
+    file_data = await files_col.find_one({"short_code": short_code})
+    if not file_data:
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    # Use a single client for sequential download (FFmpeg needs sequential input)
+    client = session_manager.get_client()
+    
+    try:
+        msg = await client.get_messages(file_data['chat_id'], ids=file_data['message_id'])
+        if not msg or not msg.media:
+            raise HTTPException(status_code=404, detail="Media no longer available")
+        
+        file = msg.media
+        if hasattr(file, 'document'):
+            file = file.document
+        elif hasattr(file, 'photo'):
+            file = file.photo
+        
+        return await get_remux_response(
+            client=client,
+            file=file,
+            file_size=file_data['file_size'],
+            filename=file_data['filename'],
+            audio_track=audio
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Remux error: {e}")
+        raise HTTPException(status_code=500, detail="Error starting remux stream")
+
+
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=True)
+    # use loop="asyncio" to prevent Uvicorn from forcing SelectorEventLoop on Windows,
+    # which causes NotImplementedError with asyncio.create_subprocess_exec
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=True, loop="asyncio")
